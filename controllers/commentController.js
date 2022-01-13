@@ -20,7 +20,7 @@ exports.comment_create_post = function(req, res) {
 };
 
 exports.comment_delete = function(req, res) {
-
+    // Need to verify user/ensure correct user is deleting it
     Comment.findByIdAndDelete({_id: req.params.id}, (err, comment) => {
         if (err) {
             res.status(409).json({message: "Failed to delete comment."})
