@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 exports.comment_create_post = function(req, res) {
     const comment = new Comment({
         text: req.params.text,
-        user: jwt.verify(req.token, "secret", (err, authData) => {
+        user: jwt.verify(req.token, process.env.secret, (err, authData) => {
             if (err)
                 res.sendStatus(403);
             else {

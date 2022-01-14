@@ -19,7 +19,7 @@ exports.post_detail_get = function (req, res) {
 };
 
 exports.post_create_post = function (req, res) {
-    jwt.verify(req.token, "secret", (err, authData) => {
+    jwt.verify(req.token, process.env.secret, (err, authData) => {
         if (err)
             res.sendStatus(403);
         else {
@@ -40,7 +40,7 @@ exports.post_create_post = function (req, res) {
 };
 
 exports.post_edit_put = function (req, res) {
-    jwt.verify(req.token, "secret", (err, authData) => {
+    jwt.verify(req.token, process.env.secret, (err, authData) => {
         if (err)
             res.sendStatus(403);
         else {
