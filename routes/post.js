@@ -3,7 +3,6 @@ const { post_list_get, post_detail_get, post_create_post, post_edit_put, post_pu
 const verifyToken = require('../shared/verify');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', post_list_get);
 
 router.get('/:id', post_detail_get);

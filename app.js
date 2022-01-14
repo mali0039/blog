@@ -9,7 +9,7 @@ const commentRouter = require('./routes/comment');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const mongoose = require("mongoose");
-
+require('db.js')
 const app = express();
 
 // view engine setup
