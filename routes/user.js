@@ -1,5 +1,5 @@
 var express = require('express');
-const { user_create_post, user_login_post } = require('../controllers/userController');
+const { user_create_post, user_login_post, user_logout_post } = require('../controllers/userController');
 var router = express.Router();
 
 /* GET users listing. */

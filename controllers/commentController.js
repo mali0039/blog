@@ -1,5 +1,6 @@
 const Comment = require('../models/comment');
 const jwt = require('jsonwebtoken')
+require("dotenv").config()
 
 exports.comment_create_post = function(req, res) {
     const comment = new Comment({

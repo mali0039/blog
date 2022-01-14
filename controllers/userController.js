@@ -3,6 +3,7 @@ const Post = require('../models/post');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const jwt = require('jsonwebtoken')
+require("dotenv").config()
 
 passport.serializeUser(function (user, done) {
     done(null, user.id);

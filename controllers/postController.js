@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+require("dotenv").config()
 
 exports.post_list_get = function (req, res) {
     Post.find().populate("author").populate("comments").exec((err, posts) => {
