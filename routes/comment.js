@@ -4,7 +4,7 @@ const verifyToken = require('../shared/verify');
 var router = express.Router();
 require("dotenv").config()
 
-router.post('/', comment_create_post);
+router.post('/', verifyToken, comment_create_post);
 
 router.delete('/:id', verifyToken, comment_delete);
 

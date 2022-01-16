@@ -1,10 +1,12 @@
 const User = require('../models/user');
 const Post = require('../models/post');
 const passport = require("passport");
+const bcrypt = require('bcryptjs')
 const LocalStrategy = require("passport-local").Strategy;
 const jwt = require('jsonwebtoken')
 require("dotenv").config()
 
+const secret = process.env.secret
 passport.serializeUser(function (user, done) {
     done(null, user.id);
 });
@@ -24,6 +26,7 @@ passport.use(
                 return done(null, false, { message: "Incorrect username" });
             }
             bcrypt.compare(password, user.password, (err, res) => {
+                console.log("WOW")
                 if (res) {
                     // passwords match! log user in
                     return done(null, user)
@@ -46,6 +49,7 @@ exports.user_create_post = function (req, res) {
             res.status(303).json({ message: "User already exists" })
         }
         else {
+            console.log(req)
             bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
                 // if err, do something
                 if (err)
@@ -70,21 +74,31 @@ exports.user_create_post = function (req, res) {
 };
 
 exports.user_login_post = function (req, res) {
-    passport.authenticate('local'),
-        function (req, res, user) {
-            jwt.sign({user}, process.env.secret, (err, token) => {
-                if (err) {
-                    res.status(401).json({message: "Failed creating JWT"});
-                }
-                res.json({token, message: "Saved token."})
-            })
-            res.status(200).json({user: user.username, message: "User logged in."})
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            return res.status(400).json({
+                message: 'Something is not right',
+                user: user
+            });
         }
+        req.login(user, { session: false }, (err) => {
+            if (err) {
+                res.send(err);
+            }
+            // generate a signed son web token with the contents of user object and return it in the response
+            jwt.sign(user.toJSON(), process.env.secret, (err, token) => {
+                if (err) {
+                    console.log(err)
+                    return res.status(401).json({ message: "Failed creating JWT" });
+                }
+                return res.status(200).json({ user: user.username, token, message: "Saved token. User logged in." })
+            })
+        });
+    })(req, res);
 }
 
 exports.user_logout_post = function (req, res) {
-    req.logout();
-    res.status(205).json({message: "User logged out."})
+    res.status(205).json({ message: "User logged out." })
 };
 
 

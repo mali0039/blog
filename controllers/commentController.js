@@ -1,25 +1,35 @@
 const Comment = require('../models/comment');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const Post = require('../models/post');
 require("dotenv").config()
 
 exports.comment_create_post = function(req, res) {
-    const comment = new Comment({
-        text: req.params.text,
-        user: jwt.verify(req.token, process.env.secret, (err, authData) => {
-            if (err)
-                res.sendStatus(403);
-            else {
-                return authData;
-            }
+    jwt.verify(req.token, process.env.secret, (err, user) => {
+        if (err)
+            res.sendStatus(403);
+        else {
+            const comment = new Comment({
+                text: req.body.text,
+                user_id: user._id
+            }).save((err, comment) => {
+                if (err) {
+                    console.log(err)
+                    res.status(409).json({message: "Failed to create comment."})
+                }
+                else {
+                    Post.updateOne({_id: req.body.postID}, {$push: {comments: comment}}, (err, post) => {
+                        console.log(err)
+                        if (err) 
+                            res.status(409).json({message: "Failed to update post."})
+                         else {
+                            res.status(200).json({post, message: "Updated post."})
+                        }
+                    })     
+                }
         })
-    }).save((err, comment) => {
-        if (err) {
-            res.status(409).json({message: "Failed to create comment."})
-        }
-          res.status(201).json({message: "comment created.", comment})
-    })
-};
-
+    }
+})
+}
 exports.comment_delete = function(req, res) {
     // Need to verify user/ensure correct user is deleting it
     jwt.verify(req.token, process.env.secret, (err, authData) => {

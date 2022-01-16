@@ -2,7 +2,7 @@ var express = require('express');
 const { user_create_post, user_login_post, user_logout_post } = require('../controllers/userController');
 var router = express.Router();
 
-router.get('/', user_create_post);
+router.post('/', user_create_post);
 
 router.post('/login', user_login_post);
 

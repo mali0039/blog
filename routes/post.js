@@ -9,7 +9,7 @@ router.get('/:id', post_detail_get);
 
 router.post('/', verifyToken, post_create_post);
 
-router.post('/:id', verifyToken, post_publish_post);
+router.post('/publish/:id', verifyToken, post_publish_post);
 
 
 router.put('/:id', verifyToken, post_edit_put);

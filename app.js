@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/comments', commentRouter);
+app.use('/posts/:postID/comment', commentRouter);
 app.use('/posts', postRouter);
 app.use('/users', userRouter);
 
