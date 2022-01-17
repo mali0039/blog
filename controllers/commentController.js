@@ -10,7 +10,8 @@ exports.comment_create_post = function(req, res) {
         else {
             const comment = new Comment({
                 text: req.body.text,
-                user_id: user._id
+                user_id: user,
+                username: user.username
             }).save((err, comment) => {
                 if (err) {
                     console.log(err)

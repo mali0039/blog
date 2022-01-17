@@ -15,6 +15,7 @@ exports.post_list_get = function (req, res) {
 exports.post_detail_get = function (req, res) {
     Post.findById({ _id: req.params.id }).populate("comments").exec((err, post) => {
         if (err) {
+            console.log(err)
             res.status(404).json({ message: "Failed to retrieve post." })
         }
         else {
